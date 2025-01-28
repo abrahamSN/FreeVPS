@@ -8,6 +8,11 @@ echo "$LINUX_USERNAME:$LINUX_USER_PASSWORD" | sudo chpasswd
 sed -i 's/\/bin\/sh/\/bin\/bash/g' /etc/passwd
 sudo hostname $LINUX_MACHINE_NAME
 
+if [[ -z "$CLOUDFLARE_TOKEN" ]]; then
+  echo "Please set 'CLOUDFLARE_TOKEN'"
+  exit 2
+fi
+
 if [[ -z "$NGROK_AUTH_TOKEN" ]]; then
   echo "Please set 'NGROK_AUTH_TOKEN'"
   exit 2
@@ -17,6 +22,12 @@ if [[ -z "$LINUX_USER_PASSWORD" ]]; then
   echo "Please set 'LINUX_USER_PASSWORD' for user: $USER"
   exit 3
 fi
+
+echo "### Install tunnel ###"
+
+curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && 
+
+sudo dpkg -i cloudflared.deb
 
 echo "### Install ngrok ###"
 
@@ -29,6 +40,9 @@ curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 
 echo "### Update user: $USER password ###"
 echo -e "$LINUX_USER_PASSWORD\n$LINUX_USER_PASSWORD" | sudo passwd "$USER"
+
+echo "### Start cloudflare tunnel ###"
+cloudflared service install "$CLOUDFLARE_TOKEN"
 
 echo "### Start ngrok proxy for 22 port ###"
 
