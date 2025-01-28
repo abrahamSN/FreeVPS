@@ -32,6 +32,7 @@ echo "### Start ngrok proxy for 22 port ###"
 
 rm -f .ngrok.log
 ./ngrok authtoken "$NGROK_AUTH_TOKEN"
+./ngrok http --url=settled-mutually-hen.ngrok-free.app 80
 ./ngrok tcp 22 --log ".ngrok.log" &
 
 sleep 10
