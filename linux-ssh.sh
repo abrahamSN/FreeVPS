@@ -24,11 +24,13 @@ wget -q https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
 tar -xvzf ngrok-v3-stable-linux-amd64.tgz
 chmod +x ./ngrok
 
+echo "### Install dokploy ###"
+sudo curl -sSL https://dokploy.com/install.sh | sh
+
 echo "### Update user: $USER password ###"
 echo -e "$LINUX_USER_PASSWORD\n$LINUX_USER_PASSWORD" | sudo passwd "$USER"
 
 echo "### Start ngrok proxy for 22 port ###"
-
 
 rm -f .ngrok.log
 ./ngrok authtoken "$NGROK_AUTH_TOKEN"
