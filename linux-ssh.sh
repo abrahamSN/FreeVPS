@@ -35,9 +35,6 @@ echo "### Start ngrok proxy for 22 port ###"
 ngrok authtoken "$NGROK_AUTH_TOKEN"
 ngrok tcp 22 --log ".ngrok.log" &
 
-echo "### Start ngrok proxy for 80 port ###"
-ngrok http --url=known-sculpin-actively.ngrok-free.app 80
-
 sleep 10
 HAS_ERRORS=$(grep "command failed" < .ngrok.log)
 
